@@ -5,11 +5,17 @@ metadata:
 manifests:
   rawYaml:
     - ./infra/k8s/*
+profiles:
+  - name: gcb
+    build:
+      googleCloudBuild: {}
+  - name: local
+    build:
+      local:
+        push: false
 build:
-  local:
-    push: false
   artifacts:
-    - image: halabalax/auth
+    - image: auth
       context: auth
       docker:
         dockerfile: Dockerfile
