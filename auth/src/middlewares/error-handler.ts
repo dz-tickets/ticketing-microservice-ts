@@ -1,4 +1,4 @@
-import {Request, Response, NextFunction} from "express";
+import {NextFunction, Request, Response} from "express";
 import {CustomError} from "../errors/custom-error";
 
 export const errorHandler = (
@@ -7,10 +7,10 @@ export const errorHandler = (
     res: Response,
     next: NextFunction
 ) => {
-    if(err instanceof CustomError){
+    if (err instanceof CustomError) {
         return res.status(err.statusCode).send({errors: err.serializedErrors()});
     }
     return res.status(400).send({
-        errors: [{ message: "Unknown error" }]
+        errors: [{message: "Unknown error"}]
     });
 };

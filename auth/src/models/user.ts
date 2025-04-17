@@ -24,8 +24,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+}, {
+    toJSON: {
+        transform(doc, ret) {
+            ret.id = ret._id;
+            delete ret._id;
+            delete ret.password;
+            delete ret.__v;
+        }
+    }
 });
-userSchema.pre('save', async function(done) {
+userSchema.pre('save', async function (done) {
     if (this.isModified('password')) {
         const hashedPassword = await Password.hash(this.get('password'));
         this.set('password', hashedPassword);
@@ -37,4 +46,4 @@ userSchema.statics.build = (attrs: UserAttr) => {
 }
 const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
 
-export { User };
+export {User};

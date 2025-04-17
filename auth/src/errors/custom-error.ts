@@ -9,5 +9,6 @@ export abstract class CustomError extends Error {
         super(errorMessage);
         Object.setPrototypeOf(this, CustomError.prototype);
     }
+
     abstract serializedErrors(): ErrorResponse[];
 }
