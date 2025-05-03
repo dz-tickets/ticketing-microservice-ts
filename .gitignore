@@ -82,3 +82,4 @@ fabric.properties
 
 # Node JS modules
 */node_modules
+*/.next
