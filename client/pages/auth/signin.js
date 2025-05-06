@@ -6,7 +6,7 @@ export default function Form() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const {doRequest, errors} = useRequest({
-        url: '/api/users/signup',
+        url: '/api/users/signin',
         method: 'post',
         body: {
             email, password
@@ -21,7 +21,7 @@ export default function Form() {
 
     return (
         <form onSubmit={onSummit}>
-            <h1>Sign Up</h1>
+            <h1>Sign In</h1>
             <div className="form-group">
                 <label>Email Address</label>
                 <input value={email} onChange={e => setEmail(e.target.value)} className="form-control"/>
@@ -32,7 +32,7 @@ export default function Form() {
                        className="form-control"/>
             </div>
             {errors}
-            <button className="btn btn-primary">Sign Up</button>
+            <button className="btn btn-primary">Sign Ip</button>
         </form>
     );
 };
