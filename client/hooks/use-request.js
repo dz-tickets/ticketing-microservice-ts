@@ -7,7 +7,7 @@ export default function UseRequest({url, method, body, onSuccess}) {
         try {
             setErrors(null);
             const response = await axios[method](url, body);
-            if(onSuccess) {
+            if (onSuccess) {
                 onSuccess(response.data);
             }
             return response.data;
