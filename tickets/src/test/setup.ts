@@ -1,10 +1,11 @@
-import {MongoMemoryServer} from "mongodb-memory-server";
+import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
-import {app} from "../app";
+import { app } from "../app";
 import request from "supertest";
+import jwt from 'jsonwebtoken';
 
 declare global {
-    var getCookie: () => Promise<string[]>;
+    var getCookie: () => string[];
 }
 
 let mongoServer: MongoMemoryServer;
@@ -17,7 +18,7 @@ beforeAll(async () => {
 }, 20000);
 
 beforeEach(async () => {
-    if(mongoose.connection.db) {
+    if (mongoose.connection.db) {
         const collections = await mongoose.connection.db.collections();
         for (let collection of collections) {
             await collection.deleteMany({});
@@ -32,21 +33,15 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-global.getCookie = async () => {
-    const email = 'test@test.com';
-    const password = 'password';
+global.getCookie = () => {
+    const payload = {
+        id: "1qaz2wsx",
+        email: "test@test.org"
+    };
 
-    const response = await request(app)
-        .post('/api/users/signup')
-        .send({
-            email, password
-        })
-        .expect(201);
-
-    const cookie = response.get('Set-Cookie');
-    if(cookie === undefined) {
-        throw new Error('Missing cookie');
-    }
-
-    return cookie;
+    const token = jwt.sign(payload, process.env.JWT_KEY!);
+    const session = { jwt: token };
+    const sessionJSON = JSON.stringify(session);
+    const base64 = Buffer.from(sessionJSON).toString('base64');
+    return [`session=${base64}`];
 };
