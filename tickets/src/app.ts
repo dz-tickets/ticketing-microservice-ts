@@ -4,6 +4,7 @@ import {json} from 'body-parser';
 import cookieSession from "cookie-session";
 import { NotFoundError, currentUser, errorHandler } from '@dz_tickets/common';
 import { createTicketRouter } from './routes/new';
+import { showTicketRoute } from './routes/show';
 
 const app = express();
 app.set('trust proxy', true);
@@ -17,6 +18,7 @@ app.use(
 app.use(currentUser);
 
 app.use(createTicketRouter);
+app.use(showTicketRoute);
 
 app.all("*", async () => {
     throw new NotFoundError();
